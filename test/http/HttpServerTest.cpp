@@ -68,7 +68,7 @@ void OnRequest(const CHttpRequest& req, CHttpResponse& resp) {
 		array["vx"] = -6490536.5807291884;
 		array["vy"] = 3616285.5418396913;
 		array["vz"] = 376117.60900893307;
-		writeObject["J2000"].append(array);
+		writeObject["Test"].append(array);
 	   }
 		
 		std::string res = writeObject.toStyledString();
