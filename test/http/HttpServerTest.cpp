@@ -7,6 +7,8 @@
 #include "HttpRequest.h"
 #include "HttpResponse.h"
 
+#include "json/json.h"
+
 std::string image;
 bool benchmark = true;
 
@@ -47,7 +49,34 @@ void OnRequest(const CHttpRequest& req, CHttpResponse& resp) {
         resp.AddHeader("Server", "CppNet");
         resp.SetBody("hello, world!\n");
 
-    } else {
+    } 
+    else if(req.GetPath() =="/test")
+    {
+        resp.SetStatusCode(k200Ok);
+        resp.SetStatusMessage("OK");
+        resp.SetContentType("text/plain");
+        resp.AddHeader("Server", "CppNet");
+        
+        Json::Value writeObject;
+	    Json::Value array;  
+	    
+	    for(int i=0; i<86400;i++){
+        array["T"] = "2020-10-12 10:10:10.12";
+		array["x"] = 5.6264354376048686;
+		array["y"] = -760.01067774477781;
+		array["z"] = 7307.5364996909384;
+		array["vx"] = -6490536.5807291884;
+		array["vy"] = 3616285.5418396913;
+		array["vz"] = 376117.60900893307;
+		writeObject["J2000"].append(array);
+	   }
+		
+		std::string res = writeObject.toStyledString();
+        
+        resp.SetBody(res);
+     
+    }
+    else {
         resp.SetStatusCode(k404NotFound);
         resp.SetStatusMessage("Not Found");
         resp.SetCloseConnection(true);
@@ -78,7 +107,7 @@ int main() {
                                               std::placeholders::_3, std::placeholders::_4));
     net.SetDisconnectionCallback(DisConnectionFunc);
 
-    net.ListenAndAccept("0.0.0.0", 8921);
+    net.ListenAndAccept("192.168.1.56", 8921);
 
     net.Join();
 }
